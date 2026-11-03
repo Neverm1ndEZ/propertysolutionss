@@ -86,7 +86,7 @@ export default function HomeYamuna() {
 					<h2 className="text-fluid-h2 text-center font-extrabold tracking-wide text-brand-950 uppercase">
 						Our Maps
 					</h2>
-					<ul className="mx-auto mt-9 grid max-w-4xl gap-7 sm:grid-cols-2">
+					<ul className="mx-auto mt-9 grid max-w-6xl gap-7 sm:grid-cols-2">
 						{AREA_LIST.map((area) => (
 							<li key={area.slug}>
 								<Link href={`/maps/${area.slug}`} className="group block">
