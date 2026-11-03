@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 export default function AllMapsPage() {
 	return (
 		<>
-			<div className="container-page py-8 sm:py-10">
+			<div className="container-page py-7 sm:py-9">
 				<nav aria-label="Breadcrumb" className="mb-6">
 					<ol className="flex items-center gap-1.5 text-sm text-brand-900/55">
 						<li>

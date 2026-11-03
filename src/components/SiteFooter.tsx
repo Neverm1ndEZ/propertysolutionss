@@ -43,7 +43,7 @@ export default function SiteFooter() {
 			 * of names; the full list is one click away on the area page.
 			 */}
 			<section aria-labelledby="map-index" className="bg-sand-100 text-brand-950">
-				<div className="container-page py-12 sm:py-14">
+				<div className="container-page py-10 sm:py-12">
 					<h2
 						id="map-index"
 						className="text-center text-xs font-semibold tracking-widest text-brand-600 uppercase"
@@ -95,7 +95,7 @@ export default function SiteFooter() {
 				</div>
 			</section>
 
-			<div className="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-6">
+			<div className="container-page grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-6">
 				<div className="sm:col-span-2 lg:col-span-1">
 					<h2 className="text-lg font-bold tracking-tight">{SITE_NAME}</h2>
 					<p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">

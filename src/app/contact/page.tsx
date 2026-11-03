@@ -16,7 +16,7 @@ const MAP_EMBED =
 
 export default function ContactPage() {
 	return (
-		<div className="container-page py-10 lg:py-14">
+		<div className="container-page py-8 lg:py-12">
 			<header className="max-w-2xl">
 				<p className="text-xs font-semibold tracking-widest text-brand-600 uppercase">
 					Contact

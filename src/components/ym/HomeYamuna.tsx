@@ -44,7 +44,7 @@ export default function HomeYamuna() {
 				/>
 				<div className="absolute inset-0 -z-10 bg-brand-950/75" />
 
-				<div className="container-page py-16 text-center text-white sm:py-20">
+				<div className="container-page py-12 text-center text-white sm:py-16">
 					<p className="text-fluid-hero font-extrabold tracking-tight uppercase">
 						{SITE_NAME}
 					</p>
@@ -81,7 +81,7 @@ export default function HomeYamuna() {
 			</section>
 
 			{/* OUR MAPS — label bar above each card */}
-			<section className="bg-sand-100 py-14 sm:py-16">
+			<section className="bg-sand-100 py-10 sm:py-12">
 				<div className="container-page">
 					<h2 className="text-fluid-h2 text-center font-extrabold tracking-wide text-brand-950 uppercase">
 						Our Maps
@@ -137,7 +137,7 @@ export default function HomeYamuna() {
 			</section>
 
 			{/* Featured plans + enquiry */}
-			<section className="container-page py-14 lg:py-16">
+			<section className="container-page py-10 sm:py-12">
 				<div>
 					<h2 className="text-fluid-h2 font-extrabold tracking-wide text-brand-950 uppercase">
 						Layout Plans
