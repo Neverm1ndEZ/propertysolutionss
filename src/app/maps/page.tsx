@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { ALL_MAPS, AREA_LIST } from "@/lib/maps";
-import MapGrid from "@/components/MapGrid";
+import { thumbUrl } from "@/lib/map-utils";
 import JsonLd, { breadcrumbs } from "@/components/JsonLd";
 import ContactSection from "@/components/ContactSection";
 
@@ -14,30 +13,10 @@ export const metadata: Metadata = {
 };
 
 /**
- * The maps hub. The region shortcuts and the one-slab-per-region layout follow
- * the sibling Greater Noida site; the searchable grid of every plan underneath
- * follows shivaassociates.co/our-maps, which lists all of its maps on this page
- * under per-area headings rather than sending you off to an area page first.
+ * A chooser, nothing more: one card per region, each opening that region's
+ * searchable listing. No scroll animation and no combined listing here — the
+ * per-area pages carry every plan.
  */
-
-const AREA_COPY: Record<string, { standfirst: string; blurb: string }> = {
-	"greater-noida": {
-		standfirst: "Every Sector, Pocket and Industrial Belt",
-		blurb:
-			"The GNIDA master plan, plus the individual layout plan for each Greek-letter sector, the Ecotech industrial pockets and the village abadi belts.",
-	},
-	"yamuna-expressway": {
-		standfirst: "Sector Layouts Along the Jewar Airport Belt",
-		blurb:
-			"The YEIDA master plan, with every Sector 16 to 33 layout — pocket by pocket through Sector 18 and Sector 20 — and the villages between them.",
-	},
-	"noida-extension": {
-		standfirst: "Greater Noida West at a Glance",
-		blurb:
-			"The master plan for Noida Extension, showing the sector grid, the green belts and where the residential pockets sit against the commercial land.",
-	},
-};
-
 export default function AllMapsPage() {
 	return (
 		<>
@@ -65,91 +44,32 @@ export default function AllMapsPage() {
 					at full resolution.
 				</p>
 
-				<ul className="mt-6 flex flex-wrap justify-center gap-3">
+				<ul className="mt-10 grid gap-6 sm:grid-cols-3">
 					{AREA_LIST.map((area) => (
 						<li key={area.slug}>
-							<Link
-								href={`/maps/${area.slug}`}
-								className="inline-flex items-center gap-2 rounded-full bg-brand-700 px-6 py-2.5 text-sm font-semibold text-white transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-brand-800"
-							>
-								{area.name} Maps
-								<span className="text-xs text-white/60 tabular-nums">
-									{area.count}
+							<Link href={`/maps/${area.slug}`} className="group block">
+								<span className="block overflow-hidden rounded-lg bg-white p-2 shadow-(--shadow-soft) ring-1 ring-sand-200 transition-shadow group-hover:shadow-(--shadow-lift)">
+									{/* eslint-disable-next-line @next/next/no-img-element -- prebuilt webp thumbnail. */}
+									<img
+										src={thumbUrl(area.cover)}
+										alt={`${area.name} master plan`}
+										width={480}
+										height={360}
+										loading="lazy"
+										decoding="async"
+										className="aspect-4/3 w-full rounded-sm object-contain"
+									/>
+								</span>
+								<span className="mt-3 flex items-center justify-center gap-2 rounded-full bg-brand-700 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors group-hover:bg-brand-800">
+									{area.name}
+									<span className="text-xs text-white/60 tabular-nums">
+										{area.count}
+									</span>
 								</span>
 							</Link>
 						</li>
 					))}
 				</ul>
-			</div>
-
-			{/* One block per region, alternating background so they read as slabs. */}
-			{AREA_LIST.map((area, i) => {
-				const copy = AREA_COPY[area.slug];
-				return (
-					<section
-						key={area.slug}
-						id={area.slug}
-						className={`scroll-mt-24 py-12 sm:py-16 ${i % 2 ? "bg-sand-100" : ""}`}
-					>
-						<div className="container-page reveal-flip">
-							<h2 className="text-fluid-h2 text-center font-extrabold text-balance text-brand-950">
-								<Link href={`/maps/${area.slug}`} className="hover:underline">
-									{area.name} Map
-								</Link>
-							</h2>
-							{copy && (
-								<p className="mt-2 text-center text-lg text-brand-900/70">
-									{copy.standfirst}
-								</p>
-							)}
-
-							<Link
-								href={`/maps/${area.slug}`}
-								className="group mt-7 block"
-								aria-label={`Browse all ${area.count} ${area.name} layout plans`}
-							>
-								<div className="relative aspect-3/2 w-full overflow-hidden rounded-xl bg-white shadow-(--shadow-soft) ring-1 ring-sand-200">
-									<Image
-										src={area.cover}
-										alt={`${area.name} master plan`}
-										fill
-										sizes="(max-width: 1024px) 100vw, 1100px"
-										quality={80}
-										className="object-contain p-2 transition-transform duration-500 group-hover:scale-[1.03]"
-									/>
-								</div>
-							</Link>
-
-							{copy && (
-								<p className="mx-auto mt-5 max-w-3xl text-center text-sm leading-relaxed text-brand-900/70">
-									{copy.blurb}
-								</p>
-							)}
-
-							<div className="mt-6 text-center">
-								<Link
-									href={`/maps/${area.slug}`}
-									className="inline-block rounded-full bg-brand-700 px-8 py-3 text-sm font-semibold text-white transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-brand-800"
-								>
-									Explore More
-								</Link>
-							</div>
-						</div>
-					</section>
-				);
-			})}
-
-			<div className="container-page py-12 sm:py-16">
-				<h2 className="text-fluid-h2 font-extrabold text-brand-950">
-					All {ALL_MAPS.length} Layout Plans
-				</h2>
-				<div className="mt-6">
-					<MapGrid
-						maps={ALL_MAPS}
-						columns={3}
-						searchLabel={`Search all ${ALL_MAPS.length} layout plans…`}
-					/>
-				</div>
 			</div>
 
 			<JsonLd
