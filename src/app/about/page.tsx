@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { BadgeCheck, Building2, Handshake, ShieldCheck } from "lucide-react";
-import ContactSidebar from "@/components/ContactSidebar";
+import ContactSection from "@/components/ContactSection";
 import { HOURS } from "@/lib/site";
+import { SITE } from "@/config/sites";
 
 export const metadata: Metadata = {
 	title: "About us",
@@ -35,8 +36,9 @@ const OFFERINGS = [
 
 export default function AboutPage() {
 	return (
-		<div className="container-page flex flex-col gap-12 py-10 lg:flex-row lg:gap-12 lg:py-14">
-			<div className="min-w-0 flex-1">
+		<>
+			<div className="container-page py-10 lg:py-14">
+			<div className="max-w-3xl">
 				<p className="text-xs font-semibold tracking-widest text-brand-600 uppercase">
 					Since 2009
 				</p>
@@ -45,12 +47,7 @@ export default function AboutPage() {
 				</h1>
 
 				<div className="mt-6 space-y-5 text-[0.95rem] leading-relaxed text-brand-900/75">
-					<p>
-						Property Solutions is a real estate firm working across Greater
-						Noida, the Yamuna Expressway and Sikandrabad. We handle the sale and
-						purchase of residential, commercial and industrial property — from a
-						single plot to a full warehouse site.
-					</p>
+					<p>{SITE.aboutLead}</p>
 					<p>
 						Buying land here usually starts with the authority layout plan, and
 						those plans are hard to find. So we put every one we have on this
@@ -85,7 +82,9 @@ export default function AboutPage() {
 				</ul>
 			</div>
 
-			<ContactSidebar />
-		</div>
+			</div>
+
+			<ContactSection />
+		</>
 	);
 }

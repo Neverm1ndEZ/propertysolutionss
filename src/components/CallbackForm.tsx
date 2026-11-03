@@ -9,7 +9,12 @@ type State = { ok: boolean; text: string } | null;
  * useActionState gives pending + result state for free — no useState trio, and
  * React keeps the button disabled for the lifetime of the promise.
  */
-export default function CallbackForm() {
+export default function CallbackForm({
+	variant = "dark",
+}: {
+	/** "light" sits on the Yamuna site's white utility strip. */
+	variant?: "dark" | "light";
+}) {
 	const [state, submit, pending] = useActionState<State, FormData>(
 		async (_prev, formData) => {
 			const phone = String(formData.get("phone") ?? "").replace(/[\s-]/g, "");
@@ -46,20 +51,28 @@ export default function CallbackForm() {
 				type="tel"
 				inputMode="tel"
 				autoComplete="tel"
-				placeholder="Request a call back"
-				className="min-w-0 flex-1 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white transition-colors outline-none placeholder:text-white/50 focus:border-brand-400 focus:bg-white/15 sm:w-48 sm:flex-none"
+				placeholder={variant === "light" ? "Enter Your Number (Request a Call Back)" : "Request a call back"}
+				className={`min-w-0 flex-1 px-4 py-2 text-sm transition-colors outline-none sm:w-56 sm:flex-none ${
+					variant === "light"
+						? "rounded border border-sand-300 bg-white text-brand-950 placeholder:text-brand-900/40 focus:border-brand-500"
+						: "rounded-full border border-white/15 bg-white/10 text-white placeholder:text-white/50 focus:border-brand-400 focus:bg-white/15"
+				}`}
 			/>
 			<button
 				type="submit"
 				disabled={pending}
-				className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-brand-500 px-4 py-2 text-sm font-semibold text-brand-950 transition-colors hover:bg-brand-400 disabled:opacity-60"
+				className={`inline-flex shrink-0 items-center gap-1.5 px-4 py-2 text-sm font-semibold transition-colors disabled:opacity-60 ${
+					variant === "light"
+						? "rounded bg-brand-800 text-white hover:bg-brand-700"
+						: "rounded-full bg-brand-500 text-brand-950 hover:bg-brand-400"
+				}`}
 			>
 				{pending ? (
 					<Loader2 aria-hidden className="size-4 animate-spin" />
 				) : (
 					<PhoneCall aria-hidden className="size-4" />
 				)}
-				{pending ? "Sending" : "Call me"}
+				{pending ? "Sending" : variant === "light" ? "OK" : "Call me"}
 			</button>
 
 			{state && (

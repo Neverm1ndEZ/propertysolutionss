@@ -1,23 +1,44 @@
 "use client";
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { Search, X } from "lucide-react";
 import MapCard from "@/components/MapCard";
 import type { MapItem } from "@/lib/map-utils";
 
+/** A map that may carry its own area, for the combined /maps listing. */
+type GridItem = MapItem & { area?: { slug: string; name: string } };
+
 /**
- * Client-side filter over one area's maps. The list is a few hundred items, so
- * a plain substring scan is well under a frame; useDeferredValue keeps typing
+ * Client-side filter over a set of maps. The list is a few hundred items, so a
+ * plain substring scan is well under a frame; useDeferredValue keeps typing
  * responsive if a slow device ever disagrees.
+ *
+ * `columns` is 3 only on the combined /maps page; every other grid is 4.
  */
 export default function MapGrid({
 	maps,
 	areaSlug,
+	columns = 4,
+	searchLabel,
 }: {
-	maps: MapItem[];
-	areaSlug: string;
+	maps: GridItem[];
+	/** Fallback area for items that do not carry their own. */
+	areaSlug?: string;
+	columns?: 3 | 4;
+	searchLabel?: string;
 }) {
 	const [query, setQuery] = useState("");
 	const deferred = useDeferredValue(query);
+
+	// The hero search navigates here with ?q=. Read it after hydration rather
+	// than with useSearchParams: that hook opts the component out of static
+	// prerendering, which left every map card missing from the server HTML and
+	// invisible to crawlers. Syncing state from the URL — an external system —
+	// is what effects are for, so the cascading-render rule does not apply.
+	useEffect(() => {
+		const q = new URLSearchParams(window.location.search).get("q");
+		// eslint-disable-next-line react-hooks/set-state-in-effect -- syncing from the URL, an external system, which is exactly what effects are for.
+		if (q) setQuery(q);
+	}, []);
 
 	const results = useMemo(() => {
 		const q = deferred.trim().toLowerCase();
@@ -37,7 +58,7 @@ export default function MapGrid({
 						type="search"
 						value={query}
 						onChange={(e) => setQuery(e.target.value)}
-						placeholder={`Search ${maps.length} layout plans…`}
+						placeholder={searchLabel ?? `Search ${maps.length} layout plans…`}
 						aria-label="Search layout plans"
 						className="w-full rounded-full border border-sand-200 bg-white py-3 pr-11 pl-11 text-sm shadow-(--shadow-soft) transition-shadow outline-none placeholder:text-brand-900/35 focus:border-brand-300 focus:shadow-(--shadow-lift)"
 					/>
@@ -63,7 +84,11 @@ export default function MapGrid({
 					No layout plan matches “{query.trim()}”.
 				</p>
 			) : (
-				<div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+				<div
+					className={`grid grid-cols-2 gap-4 sm:gap-5 ${
+						columns === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"
+					}`}
+				>
 					{results.map((map, i) => (
 						// content-visibility lets the browser skip layout/paint for
 						// offscreen cards — the difference between smooth and janky at 179.
@@ -71,7 +96,11 @@ export default function MapGrid({
 							key={map.id}
 							className="h-full [contain-intrinsic-size:auto_320px] [content-visibility:auto]"
 						>
-							<MapCard map={map} areaSlug={areaSlug} eager={i < 10} />
+							<MapCard
+								map={map}
+								areaSlug={map.area?.slug ?? areaSlug ?? ""}
+								eager={i < 10}
+							/>
 						</div>
 					))}
 				</div>

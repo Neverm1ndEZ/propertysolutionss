@@ -21,7 +21,7 @@ export default function RelatedMaps({
 			>
 				Nearby in {areaName}
 			</h2>
-			<ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+			<ul className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
 				{maps.map((map) => (
 					<li key={map.id}>
 						<Link

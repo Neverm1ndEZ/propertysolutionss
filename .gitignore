@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Client source scans (3.2GB) — working material, never deployed.
+# Named + web-sized copies live in public/maps and public/thumbs.
+/MAPS/
+
+# per-site build output
+/.next-*/

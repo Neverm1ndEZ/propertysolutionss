@@ -2,11 +2,13 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
+import HeaderYamuna from "@/components/ym/HeaderYamuna";
 import SiteFooter from "@/components/SiteFooter";
 import FloatingActions from "@/components/FloatingActions";
 import JsonLd from "@/components/JsonLd";
 import { ADDRESS, EMAIL, PHONE, SITE_NAME, SITE_URL } from "@/lib/site";
 import { AREA_LIST } from "@/lib/maps";
+import { SITE } from "@/config/sites";
 
 const jakarta = Plus_Jakarta_Sans({
 	variable: "--font-plus-jakarta",
@@ -17,24 +19,16 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
 	metadataBase: new URL(SITE_URL),
 	title: {
-		default: `${SITE_NAME} — Plots in Greater Noida & Yamuna Expressway`,
+		default: `${SITE.title} | ${SITE_NAME}`,
 		template: `%s | ${SITE_NAME}`,
 	},
-	description:
-		"Industrial plots, factories, warehouses and residential plots across Greater Noida, Yamuna Expressway and Sikandrabad. Browse every authority layout plan in one place.",
-	keywords: [
-		"Greater Noida plots",
-		"Yamuna Expressway plots",
-		"industrial plot Greater Noida",
-		"layout plan Greater Noida",
-		"property dealer Greater Noida",
-	],
+	description: SITE.description,
+	keywords: SITE.keywords,
 	openGraph: {
 		type: "website",
 		siteName: SITE_NAME,
-		title: `${SITE_NAME} — Plots in Greater Noida & Yamuna Expressway`,
-		description:
-			"Every authority layout plan for Greater Noida, Yamuna Expressway and Noida Extension, plus plots for sale and purchase.",
+		title: `${SITE.title} | ${SITE_NAME}`,
+		description: SITE.description,
 		images: [
 			{
 				url: "/site-assets/og.jpg",
@@ -69,12 +63,18 @@ const businessJsonLd = {
 	description: ADDRESS,
 	openingHours: "Mo-Su 09:30-20:30",
 	url: SITE_URL,
-	areaServed: ["Greater Noida", "Yamuna Expressway", "Sikandrabad"],
+	areaServed: [SITE.region, "Greater Noida", "Yamuna Expressway", "Sikandrabad"],
 };
 
 export default function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
+	const areas = AREA_LIST.map(({ slug, name, count }) => ({
+		slug,
+		name,
+		count,
+	}));
+
 	return (
 		<html lang="en" className={jakarta.variable}>
 			<body className="flex min-h-dvh flex-col antialiased">
@@ -84,13 +84,11 @@ export default function RootLayout({
 				>
 					Skip to content
 				</a>
-				<SiteHeader
-					areas={AREA_LIST.map(({ slug, name, count }) => ({
-						slug,
-						name,
-						count,
-					}))}
-				/>
+				{SITE.key === "yamuna" ? (
+					<HeaderYamuna areas={areas} />
+				) : (
+					<SiteHeader areas={areas} />
+				)}
 				<main id="main" className="flex-1">
 					{children}
 				</main>

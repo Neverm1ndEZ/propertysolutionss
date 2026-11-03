@@ -1,12 +1,21 @@
 import Link from "next/link";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { AREA_LIST } from "@/lib/maps";
-import { ADDRESS, EMAIL, HOURS, PHONE, PHONE_HREF, SITE_NAME } from "@/lib/site";
+import { SITE } from "@/config/sites";
+import { landingPagesFor } from "@/config/landing";
+import {
+	ADDRESS,
+	EMAIL,
+	HOURS,
+	PHONE,
+	PHONE_HREF,
+	SITE_NAME,
+} from "@/lib/site";
 
 export default function SiteFooter() {
 	return (
-		<footer className="mt-20 bg-brand-950 text-white">
-			<div className="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
+		<footer className="bg-brand-950 text-white">
+			<div className="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5">
 				<div className="sm:col-span-2 lg:col-span-1">
 					<h2 className="text-lg font-bold tracking-tight">{SITE_NAME}</h2>
 					<p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
@@ -30,6 +39,27 @@ export default function SiteFooter() {
 									className="text-white/70 transition-colors hover:text-white"
 								>
 									{area.name}
+								</Link>
+							</li>
+						))}
+					</ul>
+				</nav>
+
+				<nav aria-labelledby="footer-buy">
+					<h3
+						id="footer-buy"
+						className="text-xs font-semibold tracking-widest text-brand-400 uppercase"
+					>
+						What we deal in
+					</h3>
+					<ul className="mt-4 space-y-2.5 text-sm">
+						{landingPagesFor(SITE.key).map((p) => (
+							<li key={p.slug}>
+								<Link
+									href={`/${p.slug}`}
+									className="text-white/70 transition-colors hover:text-white"
+								>
+									{p.title}
 								</Link>
 							</li>
 						))}

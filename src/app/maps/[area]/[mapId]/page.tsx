@@ -2,18 +2,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-	ArrowLeft,
-	ArrowRight,
-	ChevronRight,
-	Download,
-	Maximize2,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronRight, Download, Maximize2 } from "lucide-react";
 import { AREA_LIST, getArea, getMaps, mapData, relatedMaps } from "@/lib/maps";
-import ContactSidebar from "@/components/ContactSidebar";
+import { thumbUrl } from "@/lib/map-utils";
+import { localityFor, mapEmbedUrl } from "@/lib/locality";
+import { SITE_NAME } from "@/lib/site";
 import JsonLd, { breadcrumbs } from "@/components/JsonLd";
 import RelatedMaps from "@/components/RelatedMaps";
-import { thumbUrl } from "@/lib/map-utils";
+import ContactSection from "@/components/ContactSection";
 
 export const dynamicParams = false;
 
@@ -33,14 +29,13 @@ export async function generateMetadata({
 	const map = getMaps(slug).find((m) => m.id === mapId);
 	if (!area || !map) return {};
 	return {
-		title: `${map.name} — ${area.name}`,
-		description: `${map.name} — authority layout plan for ${area.name}. View the full plot layout and download the original scan free.`,
+		title: `${map.name}, ${area.name} HD Map`,
+		description: `Explore ${map.name}, ${area.name} Map. Presented by ${SITE_NAME}. View plot numbers, road widths and sector layout, and download the plan free.`,
 		alternates: { canonical: `/maps/${slug}/${mapId}` },
-		// The original scan is ~1MB at 7014px; crawlers and WhatsApp reject that
-		// size, so share the prebuilt thumbnail instead.
 		openGraph: {
 			type: "article",
-			title: `${map.name} — ${area.name}`,
+			title: `${map.name}, ${area.name}`,
+			// The original is 2400px; crawlers and WhatsApp reject large images.
 			images: [thumbUrl(map.imageUrl)],
 		},
 	};
@@ -62,146 +57,214 @@ export default async function MapDetailPage({
 	const map = maps[index];
 	const prev = maps[index - 1];
 	const next = maps[index + 1];
+	const locality = localityFor(area.key);
 
 	return (
-		<div className="container-page py-8 sm:py-10">
-			<nav aria-label="Breadcrumb" className="mb-6">
-				<ol className="flex flex-wrap items-center gap-1.5 text-sm text-brand-900/55">
-					<li>
-						<Link href="/" className="hover:text-brand-700">
-							Home
-						</Link>
-					</li>
-					<ChevronRight aria-hidden className="size-3.5" />
-					<li>
-						<Link href={`/maps/${slug}`} className="hover:text-brand-700">
-							{area.name}
-						</Link>
-					</li>
-					<ChevronRight aria-hidden className="size-3.5" />
-					<li
-						aria-current="page"
-						className="line-clamp-1 font-medium text-brand-900"
-					>
-						{map.name}
-					</li>
-				</ol>
-			</nav>
+		<>
+			<div className="container-page py-8 sm:py-10">
+				<nav aria-label="Breadcrumb" className="mb-6">
+					<ol className="flex flex-wrap items-center gap-1.5 text-sm text-brand-900/55">
+						<li>
+							<Link href="/" className="hover:text-brand-700">
+								Home
+							</Link>
+						</li>
+						<ChevronRight aria-hidden className="size-3.5" />
+						<li>
+							<Link href="/maps" className="hover:text-brand-700">
+								Our Maps
+							</Link>
+						</li>
+						<ChevronRight aria-hidden className="size-3.5" />
+						<li>
+							<Link href={`/maps/${slug}`} className="hover:text-brand-700">
+								{area.name}
+							</Link>
+						</li>
+						<ChevronRight aria-hidden className="size-3.5" />
+						<li aria-current="page" className="font-medium text-brand-900">
+							{map.name}
+						</li>
+					</ol>
+				</nav>
 
-			<div className="flex flex-col gap-10 lg:flex-row lg:gap-12">
-				<div className="min-w-0 flex-1">
-					<h1 className="text-fluid-h2 font-extrabold text-balance text-brand-950">
-						{map.name}
-					</h1>
-					<p className="mt-2 text-xs font-semibold tracking-widest text-brand-600 uppercase">
-						{area.name}
+				<h1 className="text-fluid-h2 font-extrabold text-balance text-brand-950">
+					{map.name}, {area.name}
+				</h1>
+
+				{/* Caption bar above the plan, as on their sector pages. */}
+				<h2 className="mt-6 bg-brand-800 px-4 py-3 text-center text-sm font-semibold text-white sm:text-base">
+					Layout Plan For {map.name}, {area.name}. Presented By — {SITE_NAME}
+				</h2>
+
+				<figure className="border-4 border-t-0 border-brand-800 bg-white">
+					<div className="relative aspect-4/3 w-full bg-sand-100 sm:aspect-3/2">
+						<Image
+							src={map.imageUrl}
+							alt={`${map.name} layout plan, ${area.name}`}
+							fill
+							priority
+							sizes="(max-width: 1024px) 100vw, 1100px"
+							quality={80}
+							className="object-contain"
+						/>
+					</div>
+					<figcaption className="flex flex-wrap items-center gap-3 border-t border-sand-200 p-4">
+						<a
+							href={map.imageUrl}
+							download={map.name}
+							className="inline-flex items-center gap-2 rounded bg-brand-700 px-5 py-2.5 text-sm font-semibold text-white transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-brand-800"
+						>
+							<Download aria-hidden className="size-4" />
+							Download map
+						</a>
+						<a
+							href={map.imageUrl}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-flex items-center gap-2 rounded border border-sand-300 px-5 py-2.5 text-sm font-semibold text-brand-800 transition-colors hover:bg-sand-100"
+						>
+							<Maximize2 aria-hidden className="size-4" />
+							Full resolution
+						</a>
+					</figcaption>
+				</figure>
+
+				<h2 className="text-fluid-h2 mt-12 font-extrabold text-brand-950">
+					Explore {map.name}, {area.name}
+				</h2>
+
+				{/* Nearby Locality Overview — their four-column block. */}
+				<section className="mt-7" aria-labelledby="locality">
+					<h3
+						id="locality"
+						className="bg-brand-800 px-4 py-2.5 text-center text-sm font-bold tracking-wide text-white uppercase"
+					>
+						Nearby Locality Overview
+					</h3>
+					<div className="grid gap-px bg-sand-200 sm:grid-cols-2 lg:grid-cols-4">
+						{locality.map((group) => (
+							<div key={group.title} className="bg-white p-5">
+								<h4 className="text-xs font-bold tracking-widest text-brand-600 uppercase">
+									{group.title}
+								</h4>
+								<ul className="mt-3 space-y-1.5 text-sm text-brand-900/75">
+									{group.items.map((item) => (
+										<li key={item} className="flex gap-2">
+											<span aria-hidden className="text-brand-500">
+												•
+											</span>
+											{item}
+										</li>
+									))}
+								</ul>
+							</div>
+						))}
+					</div>
+					<p className="mt-2 text-xs text-brand-900/45">
+						Key landmarks across {area.name}. Distances vary by pocket — call us
+						for specifics on any plot.
 					</p>
+				</section>
 
-					<figure className="card-surface mt-6 overflow-hidden">
-						{/* Checkered neutral backdrop keeps white scans legible. */}
-						<div className="relative aspect-4/3 w-full bg-sand-100 sm:aspect-3/2">
-							<Image
-								src={map.imageUrl}
-								alt={map.name}
-								fill
-								priority
-								sizes="(max-width: 1024px) 100vw, 60vw"
-								quality={80}
-								className="object-contain"
-							/>
-						</div>
-						<figcaption className="flex flex-wrap items-center gap-3 border-t border-sand-200 p-4">
-							<a
-								href={map.imageUrl}
-								download={map.name}
-								className="inline-flex items-center gap-2 rounded-xl bg-brand-700 px-5 py-2.5 text-sm font-semibold text-white transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-brand-800"
-							>
-								<Download aria-hidden className="size-4" />
-								Download map
-							</a>
-							<a
-								href={map.imageUrl}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="inline-flex items-center gap-2 rounded-xl border border-sand-200 px-5 py-2.5 text-sm font-semibold text-brand-800 transition-colors hover:bg-sand-100"
-							>
-								<Maximize2 aria-hidden className="size-4" />
-								Full resolution
-							</a>
-						</figcaption>
-					</figure>
-
-					<section className="card-surface mt-6 p-5 sm:p-6">
-						<h2 className="text-base font-bold text-brand-950">
-							About this plan
-						</h2>
-						<p className="mt-2 text-sm leading-relaxed text-brand-900/70">
-							{map.description}
-						</p>
-					</section>
-
-					<nav
-						aria-label="Nearby layout plans"
-						className="mt-6 grid gap-3 sm:grid-cols-2"
+				{/* About */}
+				<section className="mt-10" aria-labelledby="about-map">
+					<h3
+						id="about-map"
+						className="text-lg font-bold text-brand-950 sm:text-xl"
 					>
-						{prev ? (
-							<Link
-								href={`/maps/${slug}/${prev.id}`}
-								rel="prev"
-								className="card-surface group flex items-center gap-3 p-4 transition-colors hover:border-brand-300"
-							>
-								<ArrowLeft
-									aria-hidden
-									className="size-4 shrink-0 text-brand-600 transition-transform group-hover:-translate-x-1"
-								/>
-								<span className="min-w-0">
-									<span className="block text-xs text-brand-900/45">
-										Previous
-									</span>
-									<span className="line-clamp-1 text-sm font-medium text-brand-950">
-										{prev.name}
-									</span>
+						About {map.name}, {area.name}
+					</h3>
+					<p className="mt-3 leading-relaxed text-brand-900/75">
+						{map.description}
+					</p>
+					<p className="mt-3 leading-relaxed text-brand-900/75">
+						The plan above is the authority layout for {map.name}. Use it to
+						check plot numbers, plot sizes, road widths, park and facility
+						reservations before you commit to a purchase. {SITE_NAME} has been
+						dealing in {area.name} property since 2009 — call us for current
+						availability and rates in this sector.
+					</p>
+				</section>
+
+				{/* Sector Location */}
+				<section className="mt-10" aria-labelledby="sector-location">
+					<h3
+						id="sector-location"
+						className="bg-brand-800 px-4 py-2.5 text-center text-sm font-bold tracking-wide text-white uppercase"
+					>
+						Sector Location
+					</h3>
+					<iframe
+						src={mapEmbedUrl(map.name, area.name)}
+						title={`Google map showing ${map.name}, ${area.name}`}
+						loading="lazy"
+						referrerPolicy="no-referrer-when-downgrade"
+						className="block h-[22rem] w-full border-4 border-t-0 border-brand-800 sm:h-[28rem]"
+					/>
+				</section>
+
+				<nav
+					aria-label="Nearby layout plans"
+					className="mt-10 grid gap-3 sm:grid-cols-2"
+				>
+					{prev ? (
+						<Link
+							href={`/maps/${slug}/${prev.id}`}
+							rel="prev"
+							className="group flex items-center gap-3 rounded border border-sand-200 bg-white p-4 transition-colors hover:border-brand-400"
+						>
+							<ArrowLeft
+								aria-hidden
+								className="size-4 shrink-0 text-brand-600 transition-transform group-hover:-translate-x-1"
+							/>
+							<span className="min-w-0">
+								<span className="block text-xs text-brand-900/45">Previous</span>
+								<span className="line-clamp-1 text-sm font-medium text-brand-950">
+									{prev.name}
 								</span>
-							</Link>
-						) : (
-							<span />
-						)}
-						{next && (
-							<Link
-								href={`/maps/${slug}/${next.id}`}
-								rel="next"
-								className="card-surface group flex items-center justify-end gap-3 p-4 text-right transition-colors hover:border-brand-300 sm:col-start-2"
-							>
-								<span className="min-w-0">
-									<span className="block text-xs text-brand-900/45">Next</span>
-									<span className="line-clamp-1 text-sm font-medium text-brand-950">
-										{next.name}
-									</span>
+							</span>
+						</Link>
+					) : (
+						<span />
+					)}
+					{next && (
+						<Link
+							href={`/maps/${slug}/${next.id}`}
+							rel="next"
+							className="group flex items-center justify-end gap-3 rounded border border-sand-200 bg-white p-4 text-right transition-colors hover:border-brand-400 sm:col-start-2"
+						>
+							<span className="min-w-0">
+								<span className="block text-xs text-brand-900/45">Next</span>
+								<span className="line-clamp-1 text-sm font-medium text-brand-950">
+									{next.name}
 								</span>
-								<ArrowRight
-									aria-hidden
-									className="size-4 shrink-0 text-brand-600 transition-transform group-hover:translate-x-1"
-								/>
-							</Link>
-						)}
-					</nav>
+							</span>
+							<ArrowRight
+								aria-hidden
+								className="size-4 shrink-0 text-brand-600 transition-transform group-hover:translate-x-1"
+							/>
+						</Link>
+					)}
+				</nav>
+
 				<RelatedMaps
 					maps={relatedMaps(slug, mapId)}
 					areaSlug={slug}
 					areaName={area.name}
 				/>
-				</div>
 
-				<ContactSidebar />
+				<JsonLd
+					data={breadcrumbs([
+						{ name: "Home", path: "/" },
+						{ name: "Our Maps", path: "/maps" },
+						{ name: area.name, path: `/maps/${slug}` },
+						{ name: map.name, path: `/maps/${slug}/${mapId}` },
+					])}
+				/>
 			</div>
 
-			<JsonLd
-				data={breadcrumbs([
-					{ name: "Home", path: "/" },
-					{ name: area.name, path: `/maps/${slug}` },
-					{ name: map.name, path: `/maps/${slug}/${mapId}` },
-				])}
-			/>
-		</div>
+			<ContactSection />
+		</>
 	);
 }

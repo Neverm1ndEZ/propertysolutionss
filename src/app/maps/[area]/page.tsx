@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import MapGrid from "@/components/MapGrid";
+import ContactSection from "@/components/ContactSection";
 import JsonLd, { breadcrumbs } from "@/components/JsonLd";
 import { AREA_LIST, getArea, getMaps } from "@/lib/maps";
 
@@ -36,7 +37,8 @@ export default async function MapGridPage({
 	if (!area) notFound();
 
 	return (
-		<div className="container-page py-8 sm:py-10">
+		<>
+			<div className="container-page py-8 sm:py-10">
 			<nav aria-label="Breadcrumb" className="mb-6">
 				<ol className="flex items-center gap-1.5 text-sm text-brand-900/55">
 					<li>
@@ -61,14 +63,18 @@ export default async function MapGridPage({
 				</p>
 			</header>
 
-			<MapGrid maps={getMaps(slug)} areaSlug={slug} />
+							<MapGrid maps={getMaps(slug)} areaSlug={slug} />
 
 			<JsonLd
 				data={breadcrumbs([
 					{ name: "Home", path: "/" },
+					{ name: "Our Maps", path: "/maps" },
 					{ name: area.name, path: `/maps/${area.slug}` },
 				])}
 			/>
-		</div>
+			</div>
+
+			<ContactSection />
+		</>
 	);
 }
