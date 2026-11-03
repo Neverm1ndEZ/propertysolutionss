@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import SiteHeader from "@/components/SiteHeader";
 import HeaderYamuna from "@/components/ym/HeaderYamuna";
 import SiteFooter from "@/components/SiteFooter";
 import FloatingActions from "@/components/FloatingActions";
@@ -84,11 +83,7 @@ export default function RootLayout({
 				>
 					Skip to content
 				</a>
-				{SITE.key === "yamuna" ? (
-					<HeaderYamuna areas={areas} />
-				) : (
-					<SiteHeader areas={areas} />
-				)}
+				<HeaderYamuna areas={areas} />
 				<main id="main" className="flex-1">
 					{children}
 				</main>
