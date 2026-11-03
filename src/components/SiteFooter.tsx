@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { ALL_MAPS, AREA_LIST } from "@/lib/maps";
+import { tagLabel } from "@/lib/map-utils";
 import { LANDING_PAGES } from "@/config/landing";
 import {
 	ADDRESS,
@@ -13,6 +14,21 @@ import {
 
 /** Chips per region in the footer index. The rest live on the area page. */
 const TAGS_PER_REGION = 25;
+
+/**
+ * One chip per group of plans rather than per plan — the fifteen "SECTOR 18
+ * PART-…" sheets become a single "Sector 18". The chip opens the first plan in
+ * its group, which is the sheet someone searching that sector wants anyway.
+ */
+function tagsFor(slug: string) {
+	const groups = new Map<string, string>();
+	for (const map of ALL_MAPS) {
+		if (map.area.slug !== slug) continue;
+		const label = tagLabel(map.name);
+		if (!groups.has(label)) groups.set(label, `/maps/${slug}/${map.id}`);
+	}
+	return [...groups].map(([label, href]) => ({ label, href }));
+}
 
 export default function SiteFooter() {
 	return (
@@ -36,9 +52,7 @@ export default function SiteFooter() {
 					</h2>
 					<div className="mt-7 grid gap-5 lg:grid-cols-3">
 						{AREA_LIST.map((area) => {
-							const maps = ALL_MAPS.filter(
-								(m) => m.area.slug === area.slug,
-							).slice(0, TAGS_PER_REGION);
+							const tags = tagsFor(area.slug).slice(0, TAGS_PER_REGION);
 							return (
 								<nav
 									key={area.slug}
@@ -55,18 +69,18 @@ export default function SiteFooter() {
 										</span>
 									</h3>
 									<ul className="flex flex-1 flex-wrap content-start gap-1.5 p-5">
-										{maps.map((map) => (
-											<li key={map.id}>
+										{tags.map((tag) => (
+											<li key={tag.label}>
 												<Link
-													href={`/maps/${area.slug}/${map.id}`}
+													href={tag.href}
 													className="block rounded bg-brand-800 px-2.5 py-1 text-[0.7rem] leading-tight font-semibold text-white transition-colors hover:bg-brand-600"
 												>
-													{map.name}
+													{tag.label}
 												</Link>
 											</li>
 										))}
 									</ul>
-									{area.count > maps.length && (
+									{tagsFor(area.slug).length > tags.length && (
 										<Link
 											href={`/maps/${area.slug}`}
 											className="border-t border-sand-200 px-5 py-3 text-center text-xs font-semibold text-brand-700 transition-colors hover:bg-sand-50 hover:text-brand-900"
