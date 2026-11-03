@@ -14,6 +14,61 @@ import {
 export default function SiteFooter() {
 	return (
 		<footer className="bg-brand-950 text-white">
+			{/*
+			 * Every map, tagged and linked, on every page — the strip
+			 * shivaassociates.co carry at the foot of their pages: a panel per
+			 * region with a solid heading bar and the plans as chips. It is the
+			 * bulk of their internal linking, each chip carrying the sector name
+			 * as its anchor text.
+			 *
+			 * Its own light band above the footer proper, so it reads as a section
+			 * rather than as something trailing off the end of the footer.
+			 */}
+			<section aria-labelledby="map-index" className="bg-sand-100 text-brand-950">
+				<div className="container-page py-12 sm:py-14">
+					<h2
+						id="map-index"
+						className="text-center text-xs font-semibold tracking-widest text-brand-600 uppercase"
+					>
+						All {ALL_MAPS.length} layout plans
+					</h2>
+					<div className="mt-7 space-y-5">
+						{AREA_LIST.map((area) => {
+							const maps = ALL_MAPS.filter((m) => m.area.slug === area.slug);
+							return (
+								<nav
+									key={area.slug}
+									aria-labelledby={`tags-${area.slug}`}
+									className="overflow-hidden rounded-xl bg-white ring-1 ring-sand-200"
+								>
+									<h3
+										id={`tags-${area.slug}`}
+										className="bg-brand-900 px-4 py-2.5 text-center text-sm font-bold tracking-wide text-white"
+									>
+										{area.name} Maps
+										<span className="ml-2 font-medium text-white/50 tabular-nums">
+											{area.count}
+										</span>
+									</h3>
+									<ul className="flex flex-wrap gap-1.5 p-5">
+										{maps.map((map) => (
+											<li key={map.id}>
+												<Link
+													href={`/maps/${area.slug}/${map.id}`}
+													className="block rounded bg-brand-800 px-2.5 py-1 text-[0.7rem] leading-tight font-semibold text-white transition-colors hover:bg-brand-600"
+												>
+													{map.name}
+												</Link>
+											</li>
+										))}
+									</ul>
+								</nav>
+							);
+						})}
+					</div>
+				</div>
+			</section>
+
 			<div className="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-6">
 				<div className="sm:col-span-2 lg:col-span-1">
 					<h2 className="text-lg font-bold tracking-tight">{SITE_NAME}</h2>
@@ -119,50 +174,6 @@ export default function SiteFooter() {
 						</li>
 					</ul>
 				</address>
-			</div>
-
-			{/*
-			 * Every map, tagged and linked, on every page — the same strip
-			 * shivaassociates.co carry above their copyright line. It is the bulk
-			 * of their internal linking: each of the 177 plans is one click from
-			 * anywhere on the site, and each link carries the sector name as its
-			 * anchor text.
-			 */}
-			<div className="border-t border-white/10">
-				<div className="container-page grid gap-10 py-12 lg:grid-cols-2">
-					{AREA_LIST.map((area) => {
-						const maps = ALL_MAPS.filter((m) => m.area.slug === area.slug);
-						return (
-							<nav
-								key={area.slug}
-								aria-labelledby={`tags-${area.slug}`}
-								className={area.count > 80 ? "lg:col-span-2" : undefined}
-							>
-								<h3
-									id={`tags-${area.slug}`}
-									className="text-xs font-semibold tracking-widest text-brand-400 uppercase"
-								>
-									{area.name} maps
-									<span className="ml-2 text-white/35 tabular-nums">
-										{area.count}
-									</span>
-								</h3>
-								<ul className="mt-4 flex flex-wrap gap-2">
-									{maps.map((map) => (
-										<li key={map.id}>
-											<Link
-												href={`/maps/${area.slug}/${map.id}`}
-												className="block rounded bg-white/5 px-2.5 py-1 text-[0.7rem] leading-tight font-medium text-white/65 ring-1 ring-white/10 transition-colors hover:bg-brand-700 hover:text-white hover:ring-brand-600"
-											>
-												{map.name}
-											</Link>
-										</li>
-									))}
-								</ul>
-							</nav>
-						);
-					})}
-				</div>
 			</div>
 
 			<div className="border-t border-white/10">
