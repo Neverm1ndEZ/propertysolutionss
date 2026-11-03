@@ -4,11 +4,15 @@ import { ChevronRight } from "lucide-react";
 import { ALL_MAPS, AREA_LIST } from "@/lib/maps";
 import { thumbUrl } from "@/lib/map-utils";
 import JsonLd, { breadcrumbs } from "@/components/JsonLd";
+import { keywordsFor, pageKeywords } from "@/lib/seo";
 import ContactSection from "@/components/ContactSection";
 
 export const metadata: Metadata = {
 	title: "Our Maps — All Layout Plans",
 	description: `All ${ALL_MAPS.length} authority layout plans across ${AREA_LIST.map((a) => a.name).join(", ")}, free to view and download at full resolution.`,
+	keywords: pageKeywords(
+		AREA_LIST.flatMap((a) => keywordsFor(`${a.name} layout plans`, a.name)),
+	),
 	alternates: { canonical: "/maps" },
 };
 

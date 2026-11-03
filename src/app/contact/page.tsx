@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { keywordsFor, pageKeywords } from "@/lib/seo";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import { ADDRESS, EMAIL, HOURS, PHONE, PHONE_HREF, SITE_NAME } from "@/lib/site";
@@ -6,6 +7,7 @@ import { ADDRESS, EMAIL, HOURS, PHONE, PHONE_HREF, SITE_NAME } from "@/lib/site"
 export const metadata: Metadata = {
 	title: "Contact us",
 	description: `Call ${PHONE} or email ${EMAIL}. Property Solutions, Tradex Tower 2, Alpha 1 Commercial Belt, Greater Noida.`,
+	keywords: pageKeywords(keywordsFor("contact " + SITE_NAME)),
 	alternates: { canonical: "/contact" },
 };
 

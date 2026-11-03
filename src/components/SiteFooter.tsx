@@ -11,18 +11,20 @@ import {
 	SITE_NAME,
 } from "@/lib/site";
 
+/** Chips per region in the footer index. The rest live on the area page. */
+const TAGS_PER_REGION = 25;
+
 export default function SiteFooter() {
 	return (
 		<footer className="bg-brand-950 text-white">
 			{/*
-			 * Every map, tagged and linked, on every page — the strip
-			 * shivaassociates.co carry at the foot of their pages: a panel per
-			 * region with a solid heading bar and the plans as chips. It is the
-			 * bulk of their internal linking, each chip carrying the sector name
-			 * as its anchor text.
+			 * The map index shivaassociates.co carry at the foot of their pages: a panel
+			 * per region with a solid heading bar and the plans as chips, each
+			 * carrying the sector name as its anchor text.
 			 *
-			 * Its own light band above the footer proper, so it reads as a section
-			 * rather than as something trailing off the end of the footer.
+			 * Capped per region — the headline sectors, not all 177. A footer
+			 * carrying every plan on every page was 9.6KB gzipped a page and a wall
+			 * of names; the full list is one click away on the area page.
 			 */}
 			<section aria-labelledby="map-index" className="bg-sand-100 text-brand-950">
 				<div className="container-page py-12 sm:py-14">
@@ -30,16 +32,18 @@ export default function SiteFooter() {
 						id="map-index"
 						className="text-center text-xs font-semibold tracking-widest text-brand-600 uppercase"
 					>
-						All {ALL_MAPS.length} layout plans
+						Layout plans by region
 					</h2>
-					<div className="mt-7 space-y-5">
+					<div className="mt-7 grid gap-5 lg:grid-cols-3">
 						{AREA_LIST.map((area) => {
-							const maps = ALL_MAPS.filter((m) => m.area.slug === area.slug);
+							const maps = ALL_MAPS.filter(
+								(m) => m.area.slug === area.slug,
+							).slice(0, TAGS_PER_REGION);
 							return (
 								<nav
 									key={area.slug}
 									aria-labelledby={`tags-${area.slug}`}
-									className="overflow-hidden rounded-xl bg-white ring-1 ring-sand-200"
+									className="flex flex-col overflow-hidden rounded-xl bg-white ring-1 ring-sand-200"
 								>
 									<h3
 										id={`tags-${area.slug}`}
@@ -50,7 +54,7 @@ export default function SiteFooter() {
 											{area.count}
 										</span>
 									</h3>
-									<ul className="flex flex-wrap gap-1.5 p-5">
+									<ul className="flex flex-1 flex-wrap content-start gap-1.5 p-5">
 										{maps.map((map) => (
 											<li key={map.id}>
 												<Link
@@ -62,6 +66,14 @@ export default function SiteFooter() {
 											</li>
 										))}
 									</ul>
+									{area.count > maps.length && (
+										<Link
+											href={`/maps/${area.slug}`}
+											className="border-t border-sand-200 px-5 py-3 text-center text-xs font-semibold text-brand-700 transition-colors hover:bg-sand-50 hover:text-brand-900"
+										>
+											View all {area.count} {area.name} plans →
+										</Link>
+									)}
 								</nav>
 							);
 						})}
