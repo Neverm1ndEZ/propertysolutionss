@@ -985,6 +985,13 @@ export const mapData = {
 				"Authority layout plan for SECTOR 18 PART-I in the Yamuna Expressway (YEIDA), showing plot numbers, pocket divisions, road widths, park and facility reservations. Free to view and download at full resolution.",
 		},
 		{
+			id: "sector-18-part-j",
+			name: "SECTOR 18 PART-J",
+			imageUrl: "/maps/yamuna-expressway/SECTOR 18 PART-J.jpg",
+			description:
+				"Authority layout plan for SECTOR 18 PART-J in the Yamuna Expressway (YEIDA), showing plot numbers, pocket divisions, road widths, park and facility reservations. Free to view and download at full resolution.",
+		},
+		{
 			id: "sector-18-pocket-7d",
 			name: "SECTOR 18 POCKET-7D",
 			imageUrl: "/maps/yamuna-expressway/SECTOR 18 POCKET-7D.jpg",
@@ -1278,12 +1285,35 @@ const CATEGORY: { rank: number; test: RegExp }[] = [
 
 const SECTOR_RE = /^(PART\s+)?SECTOR[\s-]*\d/i;
 
+/**
+ * A sheet that says RESIDENTIAL on it is housing, whatever else is in the name.
+ * Without this, "UPSIDC SURAJPUR SITE-C RESIDENTIAL" matches SURAJPUR and files
+ * itself under industrial. Abadi and village sheets keep their own category —
+ * "7 PERCENT RESIDENTIAL PLOTS …" belongs with the villages, not the sectors.
+ */
+const RESIDENTIAL_RE = /RESIDENTIAL/i;
+const VILLAGE_RE = /ABADI|VILLAGE|VILL\.|^\d+\s*PERCENT/i;
+
 /** 0 = numbered sector, 1 = named residential sector, 2+ = see CATEGORY. */
 function categoryRank(name: string, sectorsLead: boolean): number {
+	// Abadi and village sheets are village sheets even when the name opens with
+	// a sector ("PART SECTOR-17 ABADI VILLAGE DHANAURI"). This has to beat the
+	// sector test or they interleave with the sector plans, which is not how
+	// Shiva Associates list them — their sector pages carry no village sheets.
+	if (VILLAGE_RE.test(name)) return 4;
 	if (SECTOR_RE.test(name)) return sectorsLead ? 0 : 1;
+	if (RESIDENTIAL_RE.test(name)) return 1;
 	for (const { rank, test } of CATEGORY) if (test.test(name)) return rank;
 	return 1;
 }
+
+/**
+ * A sheet covering two sectors ("SECTOR 18 AND 20", "SECTOR 24-A AND SECTOR
+ * 22-E"). Shiva list these last within their first sector number, after the
+ * single-sector parts. Anchored right after the sector number so the many
+ * "PART-7A AND 7E" / "PART-K AND L" names do not match.
+ */
+const COMBINED_RE = /^SECTOR[\s-]*\d+\s*(-\s*[A-Z])?\s+AND\s+(SECTOR[\s-]*)?\d/i;
 
 /** Leading sector number, so SECTOR 20 follows SECTOR 18 rather than SECTOR 2. */
 function sectorNumber(name: string): number {
@@ -1311,14 +1341,42 @@ function compareMaps(a: MapItem, b: MapItem, sectorsLead: boolean): number {
 		const na = sectorNumber(a.name);
 		const nb = sectorNumber(b.name);
 		if (na !== nb) return na - nb;
+		// Same sector: the two-sector sheet closes the run.
+		const ca = Number(COMBINED_RE.test(a.name));
+		const cb = Number(COMBINED_RE.test(b.name));
+		if (ca !== cb) return ca - cb;
 	}
 	return natural(a.name, b.name);
 }
 
+/**
+ * Heading each category sits under, named the way Shiva Associates name theirs:
+ * their Greater Noida page splits into "Residential Map Greater Noida" and
+ * "Industrial Map Greater Noida", and they caption the region plan "Master Plan
+ * Greater Noida". Indexes match the ranks in CATEGORY / categoryRank, so the
+ * labels and the sort cannot drift apart.
+ *
+ * Ranks 0 and 1 share a label on purpose — numbered sectors and named sectors
+ * are both residential, so they run together as one block, as on their pages.
+ */
+const GROUP_LABEL = [
+	"Residential Map",
+	"Residential Map",
+	"Industrial Map",
+	"Institutional Map",
+	"Village & Abadi Map",
+	"Master Plan",
+];
+
 const sorted = (key: AreaKey): MapItem[] => {
 	const maps = mapData[key] as MapItem[];
 	const lead = sectorsDominate(maps);
-	return [...maps].sort((a, b) => compareMaps(a, b, lead));
+	return [...maps]
+		.sort((a, b) => compareMaps(a, b, lead))
+		.map((m) => ({
+			...m,
+			group: `${GROUP_LABEL[categoryRank(m.name, lead)]} ${AREAS[key].name}`,
+		}));
 };
 
 const ORDERED = Object.fromEntries(
@@ -1329,11 +1387,16 @@ const ORDERED = Object.fromEntries(
  * Only the regions this deployment owns. Greater Noida and Yamuna Expressway
  * are split across the two sites so neither publishes the other's map pages.
  */
+/** The region's own master plan is the honest cover; fall back to the first map. */
+const coverFor = (key: AreaKey) =>
+	(ORDERED[key].find((m) => /^MASTER PLAN/i.test(m.name)) ?? ORDERED[key][0])
+		.imageUrl;
+
 export const AREA_LIST = SITE.areas.map((key) => ({
 	key,
 	...AREAS[key],
 	count: ORDERED[key].length,
-	cover: ORDERED[key][0].imageUrl,
+	cover: coverFor(key),
 }));
 
 type Area = (typeof AREA_LIST)[number];

@@ -3,10 +3,14 @@ import { thumbUrl, type MapItem } from "@/lib/map-utils";
 
 /**
  * Card layout mirrors Shiva Associates' map grid: framed thumbnail with a solid
- * label bar underneath carrying the sector name. Their bar is black on red; the
- * client asked for white and green, so the bar is brand green.
+ * label bar underneath carrying the sector name, and nothing else. Their bar is
+ * black on red; the client asked for white and green, so the bar is brand green.
  *
- * The thumbnail is a prebuilt ~28KB webp (`pnpm img`), so the grid never touches
+ * The whole card is the link. Download lives on the map's own page, where the
+ * full-resolution plan is on screen to download — a second row of View/Download
+ * links under every card only crowded the grid.
+ *
+ * The thumbnail is a prebuilt ~25KB webp (`pnpm img`), so the grid never touches
  * the 2400px originals and never hits the image optimizer.
  */
 export default function MapCard({
@@ -20,8 +24,11 @@ export default function MapCard({
 }) {
 	const href = `/maps/${areaSlug}/${map.id}`;
 
+	// Hover stays still: these are dense scans, so lifting the card or zooming
+	// the plan makes the grid jump and crops the frame off the artwork. The cue
+	// is the ring and shadow deepening instead.
 	return (
-		<article className="group flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-(--shadow-soft) ring-1 ring-sand-200 transition-[transform,box-shadow] duration-300 ease-(--ease-out-soft) hover:-translate-y-1 hover:shadow-(--shadow-lift) focus-within:-translate-y-1">
+		<article className="group flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-(--shadow-soft) ring-1 ring-sand-200 transition-[box-shadow,--tw-ring-color] duration-200 ease-(--ease-out-soft) hover:shadow-(--shadow-lift) hover:ring-brand-400 focus-within:shadow-(--shadow-lift) focus-within:ring-brand-500">
 			<Link href={href} className="block overflow-hidden bg-white p-1.5">
 				<span className="block aspect-4/3 overflow-hidden rounded-sm ring-1 ring-sand-200">
 					{/* eslint-disable-next-line @next/next/no-img-element -- prebuilt 480px webp thumbnail. */}
@@ -33,7 +40,7 @@ export default function MapCard({
 						loading={eager ? "eager" : "lazy"}
 						fetchPriority={eager ? "high" : "auto"}
 						decoding="async"
-						className="h-full w-full bg-white object-contain transition-transform duration-500 ease-(--ease-out-soft) group-hover:scale-105"
+						className="h-full w-full bg-white object-contain"
 					/>
 				</span>
 			</Link>
@@ -48,19 +55,6 @@ export default function MapCard({
 				</span>
 			</Link>
 
-			<div className="flex items-center justify-between gap-2 px-3 py-2 text-[0.65rem] font-semibold tracking-wide uppercase">
-				<Link href={href} className="text-brand-700 hover:text-brand-900">
-					View map
-				</Link>
-				{/* Native download — same-origin, so no JS and no client bundle. */}
-				<a
-					href={map.imageUrl}
-					download={map.name}
-					className="text-brand-900/45 hover:text-brand-700"
-				>
-					Download
-				</a>
-			</div>
 		</article>
 	);
 }
