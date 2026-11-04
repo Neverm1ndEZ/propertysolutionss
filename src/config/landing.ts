@@ -32,14 +32,14 @@ export const LANDING_PAGES: LandingPage[] = [
 		h1: "Yamuna Expressway Plots",
 		h2: "YEIDA plots on the Yamuna Expressway — check the layout plan first.",
 		body: [
-			"Plots along the Yamuna Expressway are allotted by the Yamuna Expressway Industrial Development Authority (YEIDA), sector by sector, with each sector broken into lettered and numbered parts. Sector 18 alone runs from Part-1A through Part-7F, and each part has its own layout plan.",
-			"That granularity matters. Two plots in the same sector can sit in completely different pockets with different plot sizes and different road frontage. The part number is what identifies your plot, and the layout plan is where you check it.",
+			"Plots along the Yamuna Expressway are allotted by the Yamuna Expressway Industrial Development Authority (YEIDA), sector by sector, with each sector broken into lettered and numbered pockets. Sector 18 alone runs from Pocket-1A through Pocket-7F, and each pocket has its own layout plan.",
+			"That granularity matters. Two plots in the same sector can sit in completely different pockets with different plot sizes and different road frontage. The pocket number is what identifies your plot, and the layout plan is where you check it.",
 			"Property Solutions deals in YEIDA residential, commercial and industrial plots, including the 7% and 6% abadi plots in the surrounding villages. Every plan we hold is below, free to download.",
 		],
 		highlights: [
 			{
 				title: "Sector 18 & 20",
-				body: "Full part-by-part layout plans, from Part-1A through Part-7F.",
+				body: "Full pocket-by-pocket layout plans, from Pocket-1A through Pocket-7F.",
 			},
 			{
 				title: "7% & 6% abadi plots",
@@ -66,7 +66,7 @@ export const LANDING_PAGES: LandingPage[] = [
 		body: [
 			"The Yamuna Expressway corridor has moved faster than any other belt in the region since the Noida International Airport at Jewar was confirmed. Land here splits into YEIDA authority sectors and the 7% and 6% abadi plots released to villages whose land was acquired.",
 			"The two are different purchases with different paperwork. Authority plots come with allotment documentation; abadi plots come through the village route and need more careful title work. We deal in both and will tell you which one you are actually looking at.",
-			"Every YEIDA layout plan we hold is on this site, free to view and download. Find your sector and part below.",
+			"Every YEIDA layout plan we hold is on this site, free to view and download. Find your sector and pocket below.",
 		],
 		highlights: [
 			{
@@ -160,18 +160,18 @@ export const LANDING_PAGES: LandingPage[] = [
 		h1: "Residential Plots in YEIDA",
 		h2: "YEIDA residential plots — Sector 18, Sector 20 and village abadi.",
 		body: [
-			"YEIDA's residential plots are concentrated in Sector 18 and Sector 20, each divided into parts running from 1A through to the 7-series, plus pockets numbered separately. Plot sizes are standardised by pocket, which the layout plan sets out alongside every plot number.",
+			"YEIDA's residential plots are concentrated in Sector 18 and Sector 20, each divided into pockets running from 1A through to the 7-series. Plot sizes are standardised by pocket, which the layout plan sets out alongside every plot number.",
 			"Alongside the authority sectors sit the 7% abadi plots released to villages whose land was acquired — Niloni Shahpur, Mirjapur, Rampur Bangar, Acheja Bujarg, Dungarpur Reelka and others. These are a different purchase with different paperwork.",
-			"Find your sector and part below. Every plan is free to view and download at full resolution.",
+			"Find your sector and pocket below. Every plan is free to view and download at full resolution.",
 		],
 		highlights: [
 			{
-				title: "Sector 18 parts",
-				body: "Part-1A through Part-7F, each with its own layout plan.",
+				title: "Sector 18 pockets",
+				body: "Pocket-1A through Pocket-7F, each with its own layout plan.",
 			},
 			{
-				title: "Sector 20 parts",
-				body: "Part-A through Part-U, pocket by pocket.",
+				title: "Sector 20 pockets",
+				body: "Pocket-A through Pocket-U, pocket by pocket.",
 			},
 			{
 				title: "7% abadi villages",
@@ -194,13 +194,13 @@ export const LANDING_PAGES: LandingPage[] = [
 		body: [
 			"The Yamuna Expressway runs from Greater Noida toward Agra, and the land along it is planned and allotted by the Yamuna Expressway Industrial Development Authority (YEIDA). Like Greater Noida, it is a planned belt — every sector has a published layout plan showing individual plots.",
 			"The corridor's anchor is Noida International Airport at Jewar. Around it sit Jaypee Sports City and the Buddh International Circuit, the proposed Film City in Sector 21, and industrial sectors aimed at electronics, apparel and medical devices.",
-			"YEIDA sectors are divided into parts and pockets more finely than Greater Noida's — Sector 18 alone runs from Part-1A to Part-7F. The part number, not just the sector, identifies a plot.",
+			"YEIDA sectors are divided into pockets more finely than Greater Noida's — Sector 18 alone runs from Pocket-1A to Pocket-7F. The pocket number, not just the sector, identifies a plot.",
 			"Beyond the authority sectors, 7% and 6% abadi plots have been released to villages whose land was acquired. Both routes are live markets, and both are on the layout plans below.",
 		],
 		highlights: [
 			{
 				title: "YEIDA planned",
-				body: "Sector-by-sector layout plans, divided into parts and pockets.",
+				body: "Sector-by-sector layout plans, divided into pockets.",
 			},
 			{
 				title: "Jewar Airport",

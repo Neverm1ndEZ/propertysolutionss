@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ALL_MAPS, AREA_LIST } from "@/lib/maps";
 import { thumbUrl } from "@/lib/map-utils";
-import { SITE } from "@/config/sites";
 import { SITE_NAME } from "@/lib/site";
 import MapCard from "@/components/MapCard";
 import ContactSection from "@/components/ContactSection";
@@ -16,9 +15,18 @@ import ContactSection from "@/components/ContactSection";
  * shivaassociates.com.
  */
 
-const HERO_LINES = [
-	"SALE  |  PURCHASE",
-	"RESIDENTIAL PLOTS  |  INDUSTRY  |  WAREHOUSE",
+/**
+ * The client's own front-page wording, from his handwritten note (Nov 2026):
+ * the name, the YEIDA / Jewar City dealer line, the two service lines, the
+ * region line, then the Greater Noida dealer line last. `lead` lines get the
+ * larger green treatment; the pipe lines sit under them.
+ */
+const HERO_LINES: { text: string; lead?: boolean }[] = [
+	{ text: "Property Dealer in YEIDA (Yamuna Expressway) | Jewar City", lead: true },
+	{ text: "SALE  |  PURCHASE  |  LEASING" },
+	{ text: "INDUSTRY  |  RESIDENTIAL PLOTS  |  WAREHOUSING" },
+	{ text: "GREATER NOIDA  |  YEIDA  |  NOIDA" },
+	{ text: "Property Dealer in Greater Noida", lead: true },
 ];
 
 const AUTHORITIES = ["YEIDA", "GREATER NOIDA", "NOIDA", "UPSIDA", "JAYPEE GREENS"];
@@ -44,21 +52,21 @@ export default function HomeYamuna() {
 				<div className="absolute inset-0 -z-10 bg-brand-950/75" />
 
 				<div className="container-page py-12 text-center text-white sm:py-16">
-					<p className="text-fluid-hero font-extrabold tracking-tight uppercase">
+					{/* The home page's only h1 — it was a <p>, which left the page with
+					    no h1 at all. */}
+					<h1 className="text-fluid-hero font-extrabold tracking-tight uppercase">
 						{SITE_NAME}
-					</p>
-					<p className="mt-4 text-2xl font-bold tracking-wide text-brand-200 sm:text-4xl">
-						{SITE.heroRegions}
-					</p>
-					<p className="mt-4 text-base text-balance text-white/85 sm:text-xl">
-						{SITE.heroTagline}
-					</p>
+					</h1>
 					{HERO_LINES.map((line) => (
 						<p
-							key={line}
-							className="mt-3 text-sm font-semibold tracking-wide text-white/75 uppercase sm:text-lg"
+							key={line.text}
+							className={
+								line.lead
+									? "mt-4 text-xl font-bold tracking-wide text-balance text-brand-200 sm:text-3xl"
+									: "mt-3 text-sm font-semibold tracking-wide text-balance text-white/80 uppercase sm:text-lg"
+							}
 						>
-							{line}
+							{line.text}
 						</p>
 					))}
 				</div>
