@@ -19,7 +19,6 @@ import ContactSection from "@/components/ContactSection";
 const HERO_LINES = [
 	"SALE  |  PURCHASE",
 	"RESIDENTIAL PLOTS  |  INDUSTRY  |  WAREHOUSE",
-	"GREATER NOIDA  |  NOIDA  |  YEIDA",
 ];
 
 const AUTHORITIES = ["YEIDA", "GREATER NOIDA", "NOIDA", "UPSIDA", "JAYPEE GREENS"];
@@ -48,20 +47,20 @@ export default function HomeYamuna() {
 					<p className="text-fluid-hero font-extrabold tracking-tight uppercase">
 						{SITE_NAME}
 					</p>
-					<p className="mt-4 text-2xl font-bold tracking-wide uppercase sm:text-4xl">
-						{SITE.heroHeadline}
+					<p className="mt-4 text-2xl font-bold tracking-wide text-brand-200 sm:text-4xl">
+						{SITE.heroRegions}
+					</p>
+					<p className="mt-4 text-base text-balance text-white/85 sm:text-xl">
+						{SITE.heroTagline}
 					</p>
 					{HERO_LINES.map((line) => (
 						<p
 							key={line}
-							className="mt-3 text-base font-semibold tracking-wide text-white/90 uppercase sm:text-2xl"
+							className="mt-3 text-sm font-semibold tracking-wide text-white/75 uppercase sm:text-lg"
 						>
 							{line}
 						</p>
 					))}
-					<p className="mt-3 text-base font-semibold tracking-wide text-brand-300 uppercase sm:text-2xl">
-						Property Dealer in Greater Noida
-					</p>
 				</div>
 			</section>
 
