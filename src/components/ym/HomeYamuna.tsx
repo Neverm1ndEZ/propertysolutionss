@@ -23,8 +23,8 @@ import ContactSection from "@/components/ContactSection";
  */
 const HERO_LINES: { text: string; lead?: boolean }[] = [
 	{ text: "Property Dealer in YEIDA (Yamuna Expressway) | Jewar City", lead: true },
-	{ text: "SALE  |  PURCHASE  |  LEASING" },
-	{ text: "INDUSTRY  |  RESIDENTIAL PLOTS  |  WAREHOUSING" },
+	{ text: "SALE  |  PURCHASE  " },
+	{ text: "INDUSTRIAL PLOTS  |  RESIDENTIAL PLOTS  |  WAREHOUSING" },
 	{ text: "GREATER NOIDA  |  YEIDA  |  NOIDA" },
 	{ text: "Property Dealer in Greater Noida", lead: true },
 ];

@@ -30,6 +30,18 @@ function tagsFor(slug: string) {
 	return [...groups].map(([label, href]) => ({ label, href }));
 }
 
+/**
+ * Region order for the footer index only: the client wants Greater Noida
+ * leading it, while the rest of this site keeps Yamuna first because that is
+ * what the domain targets. Anything not listed falls to the end.
+ */
+const FOOTER_ORDER = ["greater-noida", "yamuna-expressway", "noida-extension"];
+const rank = (slug: string) => {
+	const i = FOOTER_ORDER.indexOf(slug);
+	return i === -1 ? FOOTER_ORDER.length : i;
+};
+const FOOTER_AREAS = [...AREA_LIST].sort((a, b) => rank(a.slug) - rank(b.slug));
+
 export default function SiteFooter() {
 	return (
 		<footer className="bg-brand-950 text-white">
@@ -51,7 +63,7 @@ export default function SiteFooter() {
 						Layout plans by region
 					</h2>
 					<div className="mt-7 grid gap-5 lg:grid-cols-3">
-						{AREA_LIST.map((area) => {
+						{FOOTER_AREAS.map((area) => {
 							const tags = tagsFor(area.slug).slice(0, TAGS_PER_REGION);
 							return (
 								<nav
