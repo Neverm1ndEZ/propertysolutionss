@@ -5,6 +5,7 @@ import { thumbUrl } from "@/lib/map-utils";
 import { SITE_NAME } from "@/lib/site";
 import MapCard from "@/components/MapCard";
 import ContactSection from "@/components/ContactSection";
+import GoogleReviews from "@/components/GoogleReviews";
 
 /**
  * Yamuna home page, modelled on shivaassociates.co: a stacked centred hero of
@@ -159,6 +160,8 @@ export default function HomeYamuna() {
 					</div>
 				</div>
 			</section>
+
+			<GoogleReviews />
 
 			<ContactSection />
 		</>
