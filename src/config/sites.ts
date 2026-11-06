@@ -37,7 +37,7 @@ export const SITE = {
 	region: "Yamuna Expressway",
 	title: "Property Dealer in Yamuna Expressway | YEIDA Property Dealer",
 	description:
-		"Property Solutions is one of the leading property dealers on the Yamuna Expressway (YEIDA), specialising in residential, commercial and industrial plots around Jewar Airport. Browse and download every authority layout plan, free.",
+		"Property dealer on the Yamuna Expressway (YEIDA) since 2009 — plots around Jewar airport. Every authority layout plan, free to view and download.",
 	keywords: SHARED_KEYWORDS,
 	/** The line under the name in the contact band; client's own wording. */
 	tagline: "Property Dealer in Yamuna Expressway | Jewar City",
