@@ -2,11 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ALL_MAPS, AREA_LIST } from "@/lib/maps";
 import { thumbUrl } from "@/lib/map-utils";
-import { ADDRESS, OFFICE_MAP_EMBED, SITE_NAME } from "@/lib/site";
-import { SITE } from "@/config/sites";
+import { SITE_NAME } from "@/lib/site";
 import MapCard from "@/components/MapCard";
-import ContactSection from "@/components/ContactSection";
-import GoogleReviews from "@/components/GoogleReviews";
 
 /**
  * Yamuna home page, modelled on shivaassociates.co: a stacked centred hero of
@@ -162,35 +159,8 @@ export default function HomeYamuna() {
 				</div>
 			</section>
 
-			{/*
-			 * Visit us — the client asked for the Google map on this site's front
-			 * page too, and for the pin to be his Business Profile rather than the
-			 * tower, so the card Google renders carries the listing.
-			 */}
-			<section className="bg-sand-100 py-10 sm:py-12" aria-labelledby="visit-us">
-				<div className="container-page">
-					<h2
-						id="visit-us"
-						className="text-fluid-h2 font-extrabold text-balance text-brand-950"
-					>
-						Visit us — {SITE_NAME} in {SITE.region}
-					</h2>
-					<p className="mt-2 text-sm text-brand-900/65">{ADDRESS}</p>
-					<div className="card-surface mt-7 overflow-hidden">
-						<iframe
-							src={OFFICE_MAP_EMBED}
-							title={`Google map showing ${SITE_NAME} in Greater Noida`}
-							loading="lazy"
-							referrerPolicy="no-referrer-when-downgrade"
-							className="block h-[22rem] w-full border-0 sm:h-[26rem]"
-						/>
-					</div>
-				</div>
-			</section>
 
-			<GoogleReviews />
 
-			<ContactSection />
 		</>
 	);
 }
