@@ -48,6 +48,19 @@ export const SITE = {
 		"From homes to industries, we help you find your perfect space.",
 	heroSubline:
 		"Residential, commercial and industrial plots along the Yamuna Expressway and around Jewar Airport — with every YEIDA authority layout plan in one place.",
+	/**
+	 * The region-specific block on /about. Each domain argues its own belt here
+	 * so the two About pages are not the same page twice.
+	 */
+	aboutFocus: {
+		heading: "Property Dealers in Yamuna Expressway",
+		paragraphs: [
+			"The Yamuna Expressway belt is this domain's home ground. As property dealers in Yamuna Expressway and a property dealer of YEIDA Authority land, we work the residential sectors from 16 through 33, the institutional and industrial pockets beside them, and the villages whose 6% and 7% abadi plots sit between the sectors.",
+			"Jewar changed this belt. The airport pulled demand, rates and timelines forward across every YEIDA sector, and it also pulled in a great deal of noise — plots sold on a story about a road that is not cut yet, or a sector that is still a line on a map. As a property dealer in Jewar we deal in what the authority has actually allotted and what is actually transacting, and we will say plainly when a Yamuna Expressway plot is priced on hope rather than on evidence.",
+			"YEIDA divides its sectors far more finely than Greater Noida does — Sector 18 alone runs from Pocket-1A through Pocket-7F, and the pocket, not just the sector, is what identifies your plot. Plot sizes are standardised by pocket, which the layout plan sets out alongside every plot number. Every one of those plans is on this site, free, so a plot for sale in Yamuna Expressway can be checked before a rupee moves.",
+			"Alongside residential, we handle industrial land for sale and warehousing land for sale along the expressway corridor, where the logistics demand around the airport sits, plus freehold parcels and the Kisan Abadi plots in the surrounding villages.",
+		],
+	},
 	aboutLead:
 		"Property Solutions has handled the sale and purchase of plots along the Yamuna Expressway since 2009 — YEIDA sectors, Jewar Airport belt, residential through industrial.",
 	sibling: {
