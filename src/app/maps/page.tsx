@@ -1,18 +1,14 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { ALL_MAPS, AREA_LIST } from "@/lib/maps";
-import { thumbUrl } from "@/lib/map-utils";
 import JsonLd, { breadcrumbs } from "@/components/JsonLd";
-import { keywordsFor, pageKeywords } from "@/lib/seo";
 import PageTail from "@/components/PageTail";
 
 export const metadata: Metadata = {
 	title: "Our Maps — All Layout Plans",
 	description: `All ${ALL_MAPS.length} authority layout plans across ${AREA_LIST.map((a) => a.name).join(", ")}, free to view and download at full resolution.`,
-	keywords: pageKeywords(
-		AREA_LIST.flatMap((a) => keywordsFor(`${a.name} layout plans`, a.name)),
-	),
 	alternates: { canonical: "/maps" },
 };
 
@@ -53,16 +49,18 @@ export default function AllMapsPage() {
 						<li key={area.slug}>
 							<Link href={`/maps/${area.slug}`} className="group block">
 								<span className="block overflow-hidden rounded-lg bg-white p-2 shadow-(--shadow-soft) ring-1 ring-sand-200 transition-shadow group-hover:shadow-(--shadow-lift)">
-									{/* eslint-disable-next-line @next/next/no-img-element -- prebuilt webp thumbnail. */}
-									<img
-										src={thumbUrl(area.cover)}
-										alt={`${area.name} master plan`}
-										width={480}
-										height={360}
-										loading="lazy"
-										decoding="async"
-										className="aspect-4/3 w-full rounded-sm object-contain"
-									/>
+									{/* Full-res through the optimiser: the 480px thumb went soft at
+									    this size, and softer again on a 2x screen. */}
+									<span className="relative block aspect-4/3 w-full overflow-hidden rounded-sm">
+										<Image
+											src={area.cover}
+											alt={`${area.name} master plan`}
+											fill
+											sizes="(max-width: 640px) 100vw, 380px"
+											quality={80}
+											className="object-contain"
+										/>
+									</span>
 								</span>
 								<span className="mt-3 flex items-center justify-center gap-2 rounded-full bg-brand-700 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors group-hover:bg-brand-800">
 									{area.name}

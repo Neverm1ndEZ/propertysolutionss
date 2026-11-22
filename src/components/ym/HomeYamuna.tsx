@@ -1,8 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ALL_MAPS, AREA_LIST } from "@/lib/maps";
-import { thumbUrl } from "@/lib/map-utils";
-import { SITE_NAME } from "@/lib/site";
+import { SITE } from "@/config/sites";
 import MapCard from "@/components/MapCard";
 
 /**
@@ -21,7 +20,7 @@ import MapCard from "@/components/MapCard";
  * larger green treatment; the pipe lines sit under them.
  */
 const HERO_LINES: { text: string; lead?: boolean }[] = [
-	{ text: "Property Dealer in YEIDA (Yamuna Expressway) | Jewar City", lead: true },
+	// The YEIDA / Jewar City line moved up into the h1 (SITE.heroHeadline).
 	{ text: "SALE  |  PURCHASE  " },
 	{ text: "INDUSTRIAL PLOTS  |  RESIDENTIAL PLOTS  |  WAREHOUSING" },
 	{ text: "GREATER NOIDA  |  YEIDA  |  NOIDA" },
@@ -41,7 +40,7 @@ export default function HomeYamuna() {
 			<section className="relative isolate flex min-h-[64svh] items-center overflow-hidden">
 				<Image
 					src="/site-assets/hero-1920.webp"
-					alt=""
+					alt="High-rise apartment towers behind a row of trees and open green space in Greater Noida"
 					fill
 					priority
 					fetchPriority="high"
@@ -51,10 +50,10 @@ export default function HomeYamuna() {
 				<div className="absolute inset-0 -z-10 bg-brand-950/75" />
 
 				<div className="container-page py-12 text-center text-white sm:py-16">
-					{/* The home page's only h1 — it was a <p>, which left the page with
-					    no h1 at all. */}
-					<h1 className="text-fluid-hero font-extrabold tracking-tight uppercase">
-						{SITE_NAME}
+					{/* The home page's only h1. It was the brand name, which ranks for
+					    nothing; the brand stays in the header logo. */}
+					<h1 className="text-fluid-hero font-extrabold tracking-tight text-balance uppercase">
+						{SITE.heroHeadline}
 					</h1>
 					{HERO_LINES.map((line) => (
 						<p
@@ -100,16 +99,18 @@ export default function HomeYamuna() {
 										{area.name} Map
 									</span>
 									<span className="block border-4 border-brand-700 bg-white p-2">
-										{/* eslint-disable-next-line @next/next/no-img-element -- prebuilt webp thumbnail. */}
-										<img
-											src={thumbUrl(area.cover)}
-											alt={`${area.name} layout map`}
-											width={480}
-											height={360}
-											loading="lazy"
-											decoding="async"
-											className="aspect-4/3 w-full object-contain transition-transform duration-500 group-hover:scale-105"
-										/>
+										{/* Full-res through the optimiser: these cards render up to
+										    580px wide, where the 480px thumb went soft. */}
+										<span className="relative block aspect-4/3 w-full overflow-hidden">
+											<Image
+												src={area.cover}
+												alt={`${area.name} layout map`}
+												fill
+												sizes="(max-width: 640px) 100vw, 580px"
+												quality={80}
+												className="object-contain transition-transform duration-500 group-hover:scale-105"
+											/>
+										</span>
 									</span>
 								</Link>
 							</li>
@@ -123,16 +124,18 @@ export default function HomeYamuna() {
 							className="group mt-10 block"
 						>
 							<span className="block border-4 border-brand-700 bg-white p-2">
-								{/* eslint-disable-next-line @next/next/no-img-element -- prebuilt webp thumbnail. */}
-								<img
-									src={thumbUrl(headline.imageUrl)}
-									alt={headline.name}
-									width={480}
-									height={360}
-									loading="lazy"
-									decoding="async"
-									className="w-full object-contain"
-								/>
+								{/* Full-res through the optimiser, not the 480px card thumb:
+								    this one renders ~1200px wide and the thumb looked blurry. */}
+								<div className="relative aspect-3/2 w-full">
+									<Image
+										src={headline.imageUrl}
+										alt={`${headline.name} layout plan`}
+										fill
+										sizes="(max-width: 1152px) 100vw, 1152px"
+										quality={80}
+										className="object-contain"
+									/>
+								</div>
 							</span>
 							<span className="block bg-brand-900 px-4 py-3 text-center text-sm font-bold text-white transition-colors group-hover:bg-brand-800">
 								{headline.name}

@@ -10,38 +10,20 @@ import type { AreaKey } from "../lib/maps.ts";
  * flagged to the client, who chose this.
  */
 
-/**
- * Competitor keyword set (Shiva Associates' own meta keywords), rebranded.
- * Used on both sites per the client's instruction. Titles and H1s still differ
- * per region so the two domains do not compete head-on for the same query.
- */
-const SHARED_KEYWORDS = [
-	"Greater Noida Property Dealers",
-	"Best Property Dealer in Greater Noida",
-	"Yamuna Expressway Property Dealer",
-	"Property Dealers In Noida",
-	"Real Estate Agents In Noida",
-	"Property Dealers in Greater Noida West",
-	"Real Estate Agents in Greater Noida",
-	"Property Dealer in YEIDA",
-	"Greater Noida layout plan",
-	"Yamuna Expressway layout plan",
-	"Noida sector map",
-];
-
 export const SITE = {
 	key: "yamuna",
 	domain: "propertysolutionss.com",
 	// Yamuna first; this domain targets Yamuna Expressway queries.
 	areas: ["yamunaExpressway", "greaterNoida", "noidaExtension"] as AreaKey[],
 	region: "Yamuna Expressway",
-	title: "Property Dealer in Yamuna Expressway | YEIDA Property Dealer",
+	// 57 chars, so it survives the brand-less default below intact.
+	title: "Property Dealer in Yamuna Expressway | YEIDA Plots & Maps",
 	description:
 		"Property dealer on the Yamuna Expressway (YEIDA) since 2009 — plots around Jewar airport. Every authority layout plan, free to view and download.",
-	keywords: SHARED_KEYWORDS,
 	/** The line under the name in the contact band; client's own wording. */
 	tagline: "Property Dealer in Yamuna Expressway | Jewar City",
-	heroHeadline: "Property Solutions",
+	// The page's h1 — brand name stays in the header logo.
+	heroHeadline: "Property Dealer in YEIDA (Yamuna Expressway) | Jewar City",
 	// The regions, as the client writes them.
 	heroRegions: "Greater Noida • Noida • YEIDA (Yamuna Expressway)",
 	heroTagline:
