@@ -22,8 +22,10 @@ export const SITE = {
 		"Property dealer on the Yamuna Expressway (YEIDA) since 2009 — plots around Jewar airport. Every authority layout plan, free to view and download.",
 	/** The line under the name in the contact band; client's own wording. */
 	tagline: "Property Dealer in Yamuna Expressway | Jewar City",
-	// The page's h1 — brand name stays in the header logo.
-	heroHeadline: "Property Dealer in YEIDA (Yamuna Expressway) | Jewar City",
+	// The page's h1 — brand name stays in the header logo. The \n is a hard
+	// break, rendered via whitespace-pre-line: the client wants "YEIDA" to end
+	// the first line, and text-balance cannot pin that.
+	heroHeadline: "Property Dealer in YEIDA\n(Yamuna Expressway) | Jewar City",
 	// The regions, as the client writes them.
 	heroRegions: "Greater Noida • Noida • YEIDA (Yamuna Expressway)",
 	heroTagline:

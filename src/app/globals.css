@@ -87,7 +87,7 @@
 
 /* Fluid headings: no breakpoint cliffs between phone and desktop. */
 @utility text-fluid-hero {
-	font-size: clamp(2rem, 1.1rem + 4.6vw, 4.75rem);
+	font-size: clamp(1.5rem, 0.9rem + 3.6vw,3.5rem);
 	line-height: 1.02;
 	letter-spacing: -0.03em;
 }

@@ -52,7 +52,7 @@ export default function HomeYamuna() {
 				<div className="container-page py-12 text-center text-white sm:py-16">
 					{/* The home page's only h1. It was the brand name, which ranks for
 					    nothing; the brand stays in the header logo. */}
-					<h1 className="text-fluid-hero font-extrabold tracking-tight text-balance uppercase">
+					<h1 className="text-fluid-hero font-extrabold tracking-tight whitespace-pre-line uppercase">
 						{SITE.heroHeadline}
 					</h1>
 					{HERO_LINES.map((line) => (

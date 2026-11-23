@@ -27,7 +27,7 @@ export default function Hero() {
 			<div className="absolute inset-0 -z-10 bg-linear-to-b from-brand-950/75 via-brand-950/55 to-brand-950/85" />
 
 			<div className="container-page py-14 text-center text-white sm:py-20">
-				<h1 className="text-fluid-hero font-extrabold text-balance">
+				<h1 className="text-fluid-hero font-extrabold whitespace-pre-line">
 					{SITE.heroHeadline}
 				</h1>
 				<p className="mt-3 text-lg font-semibold text-balance text-brand-200 sm:text-2xl">
